@@ -24,17 +24,6 @@ changeTo = direction # this lets us change where the snake goes.
 def Endgame():
     pygame.event.post(pygame.event.Event(pygame.QUIT))
 
-def collision():
-    cols = frameSizeX // tileSize   # 800 // 20 = 40  (pixels per tile? see note below)
-    rows = frameSizeY // tileSize
-
-    # If tileSize is meant to be "number of tiles" (20), use:
-    # cols = rows = tileSize
-
-    x, y = snake_pos[0]
-    if x < 0 or x >= cols or y < 0 or y >= rows:
-        Endgame()
-
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -99,11 +88,15 @@ while running:
         sl = len(snake_pos) #snake length 
         snake_pos.append([snake_pos[sl-1][0],snake_pos[sl-1][1]])
 
-    collision()
+    print(snake_pos[0])
+    if snake_pos[0][0] < 1 or snake_pos[0][0] > tileSize:
+        Endgame()
+    if snake_pos[0][1] < 1 or snake_pos[0][1] > tileSize:
+        Endgame()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(15)  # limits FPS to 60
+    clock.tick(2)  # limits FPS to 60
 
 pygame.quit()
