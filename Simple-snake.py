@@ -13,8 +13,9 @@ clock = pygame.time.Clock()
 running = True
 tileSize = 20 # how big do you want the screen? 
 
+
 food_pos = [random.randint(0, 19), random.randint(0, 19)]
-snake_pos = [[3, 2]]
+snake_pos = [[3, 2], [4,3]]
 
 # direction is which way the snake goes regardless of user input.
 direction = "right"
@@ -49,6 +50,12 @@ while running:
     elif changeTo == 'left' and direction != 'right':
         direction = 'left'
 
+    #update body pos
+    i = 1
+    while i < len(snake_pos):
+        snake_pos[i][0] = snake_pos[i-1][0]
+        snake_pos[i][1] = snake_pos[i-1][1]
+
     # change pos
     if direction == 'up':
         snake_pos[0][1] -= 1
@@ -74,6 +81,7 @@ while running:
 
     if food_pos[0] == snake_pos[0][0] and food_pos[1] == snake_pos[0][1]:
         food_pos = [random.randint(0, 19), random.randint(0, 19)]
+        snake_pos.append([snake_pos[0][0],snake_pos[0][1]])
 
 
     # flip() the display to put your work on screen
