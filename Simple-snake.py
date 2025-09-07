@@ -15,11 +15,25 @@ tileSize = 20 # how big do you want the screen?
 
 
 food_pos = [random.randint(0, 19), random.randint(0, 19)]
-snake_pos = [[3, 2], [4,3]]
+snake_pos = [[3, 2]]
 
 # direction is which way the snake goes regardless of user input.
 direction = "right"
 changeTo = direction # this lets us change where the snake goes.
+
+def Endgame():
+    pygame.event.post(pygame.event.Event(pygame.QUIT))
+
+def collision():
+    cols = frameSizeX // tileSize   # 800 // 20 = 40  (pixels per tile? see note below)
+    rows = frameSizeY // tileSize
+
+    # If tileSize is meant to be "number of tiles" (20), use:
+    # cols = rows = tileSize
+
+    x, y = snake_pos[0]
+    if x < 0 or x >= cols or y < 0 or y >= rows:
+        Endgame()
 
 while running:
     # poll for events
@@ -38,7 +52,7 @@ while running:
             if event.key == pygame.K_DOWN or event.key == ord('s'):
                 changeTo = 'down'
             if event.key == pygame.K_ESCAPE:
-                pygame.event.post(pygame.event.Event(pygame.QUIT))
+                Endgame()
 
     # make sure snake cant go in the wrong direction
     if changeTo == 'up' and direction != 'down':
@@ -51,10 +65,11 @@ while running:
         direction = 'left'
 
     #update body pos
-    i = 1
-    while i < len(snake_pos):
+    i = len(snake_pos) -1
+    while i > 0:
         snake_pos[i][0] = snake_pos[i-1][0]
         snake_pos[i][1] = snake_pos[i-1][1]
+        i -= 1
 
     # change pos
     if direction == 'up':
@@ -81,8 +96,10 @@ while running:
 
     if food_pos[0] == snake_pos[0][0] and food_pos[1] == snake_pos[0][1]:
         food_pos = [random.randint(0, 19), random.randint(0, 19)]
-        snake_pos.append([snake_pos[0][0],snake_pos[0][1]])
+        sl = len(snake_pos) #snake length 
+        snake_pos.append([snake_pos[sl-1][0],snake_pos[sl-1][1]])
 
+    collision()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
