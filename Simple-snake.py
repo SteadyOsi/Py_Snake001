@@ -14,7 +14,7 @@ running = True
 tileSize = 20 # how big do you want the screen? 
 
 food_pos = [random.randint(0, 19), random.randint(0, 19)]
-snake_pos = [3, 2]
+snake_pos = [[3, 2]]
 
 # direction is which way the snake goes regardless of user input.
 direction = "right"
@@ -51,13 +51,13 @@ while running:
 
     # change pos
     if direction == 'up':
-        snake_pos[1] -= 1
+        snake_pos[0][1] -= 1
     elif direction == 'down':
-        snake_pos[1] += 1
+        snake_pos[0][1] += 1
     elif direction == 'right':
-        snake_pos[0] += 1
+        snake_pos[0][0] += 1
     elif direction == 'left':
-        snake_pos[0] -= 1
+        snake_pos[0][0] -= 1
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
@@ -67,10 +67,12 @@ while running:
     food = pygame.Rect(food_pos[0]*frameSizeY/tileSize, food_pos[1]*frameSizeY/tileSize, frameSizeX/tileSize, frameSizeY/tileSize)
     pygame.draw.rect(screen, (255, 0, 0), food)
 
-    snake = pygame.Rect(snake_pos[0]*frameSizeY/tileSize, snake_pos[1]*frameSizeY/tileSize, frameSizeX/tileSize, frameSizeY/tileSize)
-    pygame.draw.rect(screen, (0,255,0), snake)
+    for bodyPart in snake_pos:
+        snake = pygame.Rect(bodyPart[0]*frameSizeY/tileSize, bodyPart[1]*frameSizeY/tileSize, frameSizeX/tileSize, frameSizeY/tileSize)
+        pygame.draw.rect(screen, (0,255,0), snake)
 
-    if food_pos[0] == snake_pos[0]*frameSizeY/tileSize and food_pos[1]*frameSizeY/tileSize == snake_pos[1]*frameSizeY/tileSize:
+
+    if food_pos[0] == snake_pos[0][0] and food_pos[1] == snake_pos[0][1]:
         food_pos = [random.randint(0, 19), random.randint(0, 19)]
 
 
